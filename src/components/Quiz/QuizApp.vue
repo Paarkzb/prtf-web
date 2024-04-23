@@ -12,10 +12,10 @@ declare interface question {
   answer: string
 }
 
-const quizes: Ref<question[]> = ref([])
+const questions: Ref<question[]> = ref([])
 
 function addQuiz() {
-  quizes.value.push({
+  questions.value.push({
     id: id.value++,
     question: '',
     answer: ''
@@ -25,7 +25,7 @@ function addQuiz() {
 function saveQuiz() {
   axios
     .post('http://localhost:8001/quiz', {
-      quizes: quizes.value
+      questions: questions.value
     })
     .then(function (response) {
       console.log(response)
@@ -38,7 +38,7 @@ function saveQuiz() {
 
 <template>
   <div>
-    {{ quizes }}
+    {{ questions }}
     <form>
       <div class="mb-5">
         <input
@@ -49,11 +49,11 @@ function saveQuiz() {
           name="add-quiz-button"
         />
       </div>
-      <div v-for="quiz in quizes" :key="quiz.id">
+      <div v-for="q in questions" :key="q.id">
         <QuizQuestion
-          :Id="quiz.id"
-          @question="(msg) => (quizes[quiz.id - 1].question = msg)"
-          @answer="(msg) => (quizes[quiz.id - 1].answer = msg)"
+          :Id="q.id"
+          @question="(msg) => (questions[q.id - 1].question = msg)"
+          @answer="(msg) => (questions[q.id - 1].answer = msg)"
         />
       </div>
       <div>
