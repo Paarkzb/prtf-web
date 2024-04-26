@@ -22,26 +22,22 @@ function answerChange(e) {
 </script>
 
 <template>
-  <div>
-    <div class="mb-5 flex gap-x-5">
-      <label for="question">Вопрос</label>
-      <input
-        type="text"
-        name="question"
-        @input="questionChange"
-        :id="'question' + Id"
-        :value="questionValue"
-      />
-    </div>
-    <div class="mb-5 flex gap-x-5">
-      <label for="answer">Ответ</label>
-      <input
-        type="text"
-        name="answer"
-        @input="answerChange"
-        :id="'answer' + Id"
-        :value="answerValue"
-      />
-    </div>
+  <div class="flex flex-col">
+    <label for="question">Вопрос {{ Id }}</label>
+    <input
+      type="text"
+      name="question"
+      @input="questionChange"
+      :id="'question' + Id"
+      :value="questionValue"
+    />
+    <label for="answer">Ответ</label>
+    <input
+      type="text"
+      name="answer"
+      @input="answerChange"
+      :id="'answer' + Id"
+      :value="answerValue"
+    />
   </div>
 </template>

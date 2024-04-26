@@ -2,16 +2,17 @@
 import { RouterLink, RouterView } from 'vue-router'
 </script>
 
-<template >
-  <main class="ml-32">
-    <header class="p-4 ml-32">
-      <nav class="flex gap-x-5">
+<template>
+  <header class="p-4 bg-teal-500">
+    <nav class="flex">
+      <div class="w-[70%] m-auto flex gap-x-5">
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
         <RouterLink to="/quiz">Quiz</RouterLink>
-      </nav>
-    </header>
-
+      </div>
+    </nav>
+  </header>
+  <main class="mx-auto w-[70%] h-full min-h-[100vh] bg-gray-300 px-10 pt-4">
     <RouterView />
   </main>
 </template>
