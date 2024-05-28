@@ -17,13 +17,44 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue')
     },
-    
+
     {
       path: '/quiz',
       name: 'quiz',
-      component: () => import('../views/QuizView.vue')
+      component: () => import('../views/quiz/QuizView.vue'),
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
+      path: '/quiz/:id',
+      name: 'quizById',
+      component: () => import('../views/quiz/QuizData.vue'),
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import('../views/LoginView.vue')
     }
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.requireAuth) {
+    const user = localStorage.getItem('user')
+    if (user) {
+      // user is authenticated
+      next()
+    } else {
+      next('/login')
+    }
+  } else {
+    // non protected route
+    next()
+  }
 })
 
 export default router

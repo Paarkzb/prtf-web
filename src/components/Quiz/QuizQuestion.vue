@@ -1,18 +1,20 @@
 <script setup>
 import { ref } from 'vue'
 
-defineProps({
-  Id: Number
+const props = defineProps({
+  Index: Number,
+  Title: String,
+  Answer: String
 })
 
-const emit = defineEmits(['question', 'answer'])
+const emit = defineEmits(['title', 'answer'])
 
-const questionValue = ref('')
-const answerValue = ref('')
+const titleValue = ref(props.Title)
+const answerValue = ref(props.Answer)
 
-function questionChange(e) {
-  questionValue.value = e.target.value
-  emit('question', questionValue)
+function titleChange(e) {
+  titleValue.value = e.target.value
+  emit('title', titleValue)
 }
 
 function answerChange(e) {
@@ -23,20 +25,20 @@ function answerChange(e) {
 
 <template>
   <div class="flex flex-col">
-    <label for="question">Вопрос {{ Id }}</label>
+    <label for="question">Вопрос {{ Index }}</label>
     <input
       type="text"
       name="question"
-      @input="questionChange"
-      :id="'question' + Id"
-      :value="questionValue"
+      @input="titleChange"
+      :id="'question' + Index"
+      :value="titleValue"
     />
-    <label for="answer">Ответ</label>
+    <label for="answer">Ответ {{ Index }}</label>
     <input
       type="text"
       name="answer"
       @input="answerChange"
-      :id="'answer' + Id"
+      :id="'answer' + Index"
       :value="answerValue"
     />
   </div>
