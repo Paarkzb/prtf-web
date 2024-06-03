@@ -1,51 +1,81 @@
 <script setup lang="ts">
-import axios from 'axios'
 import Swal from 'sweetalert2'
 import { ref } from 'vue'
 
 const props = defineProps({
-  show: Boolean
+  show: Boolean,
+  type: String,
+  editId: String
 })
 const emit = defineEmits(['save', 'close'])
 
-const name = ref('')
-const description = ref('')
+const name = defineModel('editName')
+const description = defineModel('editDescription')
 
 function saveQuiz() {
-  let user = JSON.parse(localStorage.getItem('user') || '')
-  let config = {
-    headers: {
-      Authorization: 'Bearer ' + user.token
+  if (props.type === 'create') {
+    let quiz = {
+      name: name.value,
+      description: description.value,
+      questions: []
     }
-  }
 
-  let quiz = {
-    name: name.value,
-    description: description.value,
-    questions: []
-  }
-
-  axios
-    .post('http://localhost:8001/api/quiz', quiz, config)
-    .then(function (response) {
-      if (response.status === 201) {
-        emit('save')
-        emit('close')
-        Swal.fire({
-          title: 'Успех',
-          text: 'Квиз сохранен',
-          icon: 'success'
-        })
-      }
-    })
-    .catch(function (error) {
-      console.log(error)
-      Swal.fire({
-        title: 'Ошибка',
-        text: 'Квиз не сохранен',
-        icon: 'error'
+    window.axios
+      .post('http://localhost:8001/api/quiz', quiz)
+      .then(function (response) {
+        if (response.status === 201) {
+          emit('save')
+          emit('close')
+          Swal.fire({
+            title: 'Успех',
+            text: 'Квиз сохранен',
+            icon: 'success'
+          })
+        }
       })
-    })
+      .catch(function (error) {
+        console.log(error)
+        Swal.fire({
+          title: 'Ошибка',
+          text: 'Квиз не сохранен',
+          icon: 'error'
+        })
+      })
+  } else if (props.type === 'edit') {
+    let quiz = {
+      name: name.value,
+      description: description.value
+    }
+    window.axios
+      .put('http://localhost:8001/api/quiz/' + props.editId, quiz)
+      .then(function (response) {
+        if (response.status === 200) {
+          emit('save')
+          Swal.fire({
+            title: 'Успех',
+            text: 'Квиз сохранен',
+            icon: 'success'
+          })
+        } else {
+          Swal.fire({
+            title: 'Ошибка',
+            text: 'Квиз не изменен',
+            icon: 'error'
+          })
+        }
+        emit('close')
+      })
+      .catch(function (error) {
+        console.log(error)
+        Swal.fire({
+          title: 'Ошибка',
+          text: 'Квиз не изменен',
+          icon: 'error'
+        })
+      })
+  } else {
+    console.log('error')
+  }
 }
 </script>
 
@@ -55,7 +85,8 @@ function saveQuiz() {
       <div class="modal-container">
         <div class="modal-header">
           <div class="text-center">
-            <span class="text-xl">Создание квиза</span>
+            <span class="text-xl" v-if="props.type === 'create'">Создание квиза</span>
+            <span class="text-xl" v-if="props.type === 'edit'">Изменение квиза</span>
             <button
               class="modal-default-button float-right fa fa-times"
               @click="$emit('close')"

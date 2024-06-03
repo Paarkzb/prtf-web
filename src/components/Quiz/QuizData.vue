@@ -1,24 +1,27 @@
 <script setup lang="ts">
-import axios from 'axios'
 import { useRoute } from 'vue-router'
-import { store } from '@/stores/user'
 import { onMounted, ref, type Ref } from 'vue'
 import Swal from 'sweetalert2'
 import { v4 as uuidv4 } from 'uuid'
 import QuizQuestion from './QuizQuestion.vue'
+import router from '@/router'
 
 const route = useRoute()
 
-interface question {
+declare interface question {
   id: string
   index: number
   title: string
   answer: string
 }
 
-interface quiz {
+declare interface quiz {
   id: string
-  rf_user_id: string
+  user: {
+    id: string
+    name: string
+    username: string
+  }
   name: string
   description: string
   questions: question[]
@@ -27,20 +30,19 @@ interface quiz {
 const id = route.params.id
 const quizData: Ref<quiz> = ref({
   id: '',
-  rf_user_id: '',
+  user: {
+    id: '',
+    name: '',
+    username: ''
+  },
   name: '',
   description: '',
   questions: []
 })
 
 function getQuizData() {
-  let config = {
-    headers: {
-      Authorization: 'Bearer ' + store.getters.user.token
-    }
-  }
-  axios
-    .get('http://localhost:8001/api/quiz/' + id, config)
+  window.axios
+    .get('api/quiz/' + id)
     .then((response) => response.data)
     .then((data) => {
       console.log(data)
@@ -65,13 +67,8 @@ function deleteQuestion() {
 }
 
 function saveQuiz() {
-  let config = {
-    headers: {
-      Authorization: 'Bearer ' + store.getters.user.token
-    }
-  }
-  axios
-    .put('http://localhost:8001/api/quiz/' + id, quizData.value, config)
+  window.axios
+    .put('api/quiz/' + id, quizData.value)
     .then(function (response) {
       if (response.status === 200) {
         Swal.fire({
@@ -98,12 +95,15 @@ onMounted(() => {
 
 <template>
   <!-- <div>{{ quizData }}</div> -->
+  <div>
+    <button class="p-4 bg-orange-400 rounded" @click="router.go(-1)">Назад</button>
+  </div>
   <div class="text-center">
     <div>
       <h1 class="text-xl font-bold">{{ quizData.name }}</h1>
     </div>
     <div>
-      <h3>Создатель: {{ quizData.rf_user_id }}</h3>
+      <h3>Создатель: {{ quizData?.user.username }}</h3>
     </div>
   </div>
   <div>{{ quizData.description }}</div>

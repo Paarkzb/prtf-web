@@ -19,16 +19,11 @@ function login() {
     .then(function (response) {
       console.log(response)
       token = JSON.stringify(response)
-      try {
-        localStorage.setItem('user', token)
-        router.push({ name: 'home' })
-      } catch (e) {
-        Swal.fire({
-          title: 'Ошибка',
-          text: 'Авторизоваться не удалось',
-          icon: 'error'
-        })
-      }
+      localStorage.setItem('user', token)
+    })
+    .then((response) => {
+      console.log(response)
+      router.push({ name: 'home' })
     })
     .catch(function (error) {
       console.log(error)

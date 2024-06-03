@@ -6,7 +6,7 @@ import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
-import axios from 'axios'
+import axios, { type AxiosInstance } from 'axios'
 import { store } from './stores/user'
 
 const app = createApp(App)
@@ -14,10 +14,18 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 
-app.config.globalProperties.test = axios.create({
-  baseURL: 'http://localhost:8001/',
+declare global {
+  interface Window {
+    axios: AxiosInstance
+    serverurl: string
+  }
+}
+
+window.serverurl = 'http://localhost:8001/'
+window.axios = axios.create({
+  baseURL: window.serverurl,
   headers: {
-    Authorization: `Bearer ${store.getters.user.token}`
+    Authorization: 'Bearer ' + store.getters.user.token
   }
 })
 
