@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import Swal from 'sweetalert2'
-import { ref } from 'vue'
 
 const props = defineProps({
   show: Boolean,
@@ -21,11 +20,11 @@ function saveQuiz() {
     }
 
     window.axios
-      .post('http://localhost:8001/api/quiz', quiz)
+      .post(window.quizApiURL + 'api/quiz', quiz)
       .then(function (response) {
         if (response.status === 201) {
           emit('save')
-          emit('close')
+          closeModal()
           Swal.fire({
             title: 'Успех',
             text: 'Квиз сохранен',
@@ -47,7 +46,7 @@ function saveQuiz() {
       description: description.value
     }
     window.axios
-      .put('http://localhost:8001/api/quiz/' + props.editId, quiz)
+      .put(window.quizApiURL + 'api/quiz/' + props.editId, quiz)
       .then(function (response) {
         if (response.status === 200) {
           emit('save')
@@ -63,7 +62,7 @@ function saveQuiz() {
             icon: 'error'
           })
         }
-        emit('close')
+        closeModal()
       })
       .catch(function (error) {
         console.log(error)
@@ -77,6 +76,12 @@ function saveQuiz() {
     console.log('error')
   }
 }
+
+function closeModal() {
+  emit('close')
+  name.value = ''
+  description.value = ''
+}
 </script>
 
 <template>
@@ -89,7 +94,7 @@ function saveQuiz() {
             <span class="text-xl" v-if="props.type === 'edit'">Изменение квиза</span>
             <button
               class="modal-default-button float-right fa fa-times"
-              @click="$emit('close')"
+              @click="closeModal()"
             ></button>
           </div>
         </div>

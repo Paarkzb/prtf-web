@@ -1,32 +1,32 @@
 import './assets/main.css'
 import './index.css'
+import '../node_modules/flowbite-vue/dist/index.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 import App from './App.vue'
 import router from './router'
-import axios, { type AxiosInstance } from 'axios'
-import { store } from './stores/user'
+import { type AxiosInstance } from 'axios'
+import axiosInstanceConfig from '@/config/axiosInstanceConfig'
 
 const app = createApp(App)
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
 
-app.use(createPinia())
+app.use(pinia)
 app.use(router)
 
 declare global {
   interface Window {
     axios: AxiosInstance
-    serverurl: string
+    quizApiURL: string
   }
 }
 
-window.serverurl = 'http://localhost:8001/'
-window.axios = axios.create({
-  baseURL: window.serverurl,
-  headers: {
-    Authorization: 'Bearer ' + store.getters.user.token
-  }
-})
+window.quizApiURL = 'http://localhost:8001/'
+
+window.axios = axiosInstanceConfig
 
 app.mount('#app')

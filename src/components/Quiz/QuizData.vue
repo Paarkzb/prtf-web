@@ -5,6 +5,7 @@ import Swal from 'sweetalert2'
 import { v4 as uuidv4 } from 'uuid'
 import QuizQuestion from './QuizQuestion.vue'
 import router from '@/router'
+import { FwbButton } from 'flowbite-vue'
 
 const route = useRoute()
 
@@ -42,7 +43,7 @@ const quizData: Ref<quiz> = ref({
 
 function getQuizData() {
   window.axios
-    .get('api/quiz/' + id)
+    .get(window.quizApiURL + 'api/quiz/' + id)
     .then((response) => response.data)
     .then((data) => {
       console.log(data)
@@ -68,7 +69,7 @@ function deleteQuestion() {
 
 function saveQuiz() {
   window.axios
-    .put('api/quiz/' + id, quizData.value)
+    .put(window.quizApiURL + 'api/quiz/' + id, quizData.value)
     .then(function (response) {
       if (response.status === 200) {
         Swal.fire({
@@ -96,7 +97,7 @@ onMounted(() => {
 <template>
   <!-- <div>{{ quizData }}</div> -->
   <div>
-    <button class="p-4 bg-orange-400 rounded" @click="router.go(-1)">Назад</button>
+    <fwb-button color="yellow" @click="router.go(-1)">Назад</fwb-button>
   </div>
   <div class="text-center">
     <div>
@@ -106,44 +107,24 @@ onMounted(() => {
       <h3>Создатель: {{ quizData?.user.username }}</h3>
     </div>
   </div>
-  <div>{{ quizData.description }}</div>
+  <div class="my-5">Описание: {{ quizData.description }}</div>
   <div>
     <form class="flex flex-col">
-      <QuizQuestion
-        class="my-4"
-        v-for="q in quizData.questions.sort((a, b) => a.index - b.index)"
-        :key="q.id"
-        :Index="q.index"
-        :Title="q.title"
-        :Answer="q.answer"
-        @title="(msg) => (quizData.questions[q.index - 1].title = msg)"
-        @answer="(msg) => (quizData.questions[q.index - 1].answer = msg)"
-      />
+      <div class="flex flex-col gap-4">
+        <QuizQuestion
+          v-for="q in quizData.questions.sort((a, b) => a.index - b.index)"
+          :key="q.id"
+          :Index="q.index"
+          :Title="q.title"
+          :Answer="q.answer"
+          @title="(msg) => (quizData.questions[q.index - 1].title = msg)"
+          @answer="(msg) => (quizData.questions[q.index - 1].answer = msg)"
+        />
+      </div>
       <div class="my-4 flex justify-between">
-        <input
-          class="p-4 bg-blue-500 rounded"
-          type="button"
-          @click="saveQuiz"
-          value="Сохранить квиз"
-          id="save-quiz-button"
-          name="save-quiz-button"
-        />
-        <input
-          class="p-4 bg-green-500 rounded"
-          type="button"
-          value="Добавить вопрос"
-          @click="addQuestion"
-          id="add-question-button"
-          name="add-question-button"
-        />
-        <input
-          type="button"
-          class="p-4 bg-red-500 rounded"
-          @click="deleteQuestion"
-          value="Удалить вопрос"
-          id="delete-question-button"
-          name="delete-question-button"
-        />
+        <fwb-button @click="saveQuiz">Сохранить</fwb-button>
+        <fwb-button color="green" @click.prevent="addQuestion">Добавить вопрос</fwb-button>
+        <fwb-button color="red" @click.prevent="deleteQuestion">Удалить вопрос</fwb-button>
       </div>
     </form>
   </div>

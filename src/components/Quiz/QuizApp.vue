@@ -1,15 +1,23 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import Swal from 'sweetalert2'
 import CreateQuizModal from './QuizModal.vue'
 import router from '@/router'
+import {
+  FwbButton,
+  FwbTable,
+  FwbTableBody,
+  FwbTableCell,
+  FwbTableHead,
+  FwbTableHeadCell,
+  FwbTableRow
+} from 'flowbite-vue'
 
 let quizes = ref([] as any)
 
 function getAllQuiz() {
   window.axios
-    .get('api/quiz')
+    .get(window.quizApiURL + 'api/quiz')
     .then((data) => data.data)
     .then(function (response) {
       console.log(response)
@@ -27,7 +35,7 @@ function getAllQuiz() {
 
 function deleteQuiz(id: string) {
   window.axios
-    .delete('api/quiz/' + id)
+    .delete(window.quizApiURL + 'api/quiz/' + id)
     .then((response) => {
       if (response.status == 200) {
         Swal.fire({
@@ -72,6 +80,12 @@ function showQuizModal(t: string, quiz = { id: '', name: '', description: '', qu
   editName.value = quiz?.name
   editDescription.value = quiz?.description
 }
+
+function closeQuizModal() {
+  showCreateQuizModal.value = false
+  editName.value = ''
+  editDescription.value = ''
+}
 </script>
 
 <template>
@@ -82,62 +96,55 @@ function showQuizModal(t: string, quiz = { id: '', name: '', description: '', qu
       :editId="editId"
       :editName="editName"
       :editDescription="editDescription"
-      @close="showCreateQuizModal = false"
+      @close="closeQuizModal()"
       @save="getAllQuiz()"
     >
     </CreateQuizModal>
   </div>
 
-  <div class="mb-5">
-    <div class="flex justify-end">
-      <button class="p-4 bg-green-500 rounded" @click="showQuizModal(modalTypes[0])">
-        Создать
-      </button>
-    </div>
-  </div>
+  <div class="flex justify-end"></div>
 
   <div>
-    <table class="w-full text-center">
-      <caption class="text-xl font-bold">
-        Квизы
-      </caption>
-      <thead class="py-2 bg-slate-400 text-base">
-        <tr class="divide-x divide-black">
-          <th class="p-2">#</th>
-          <th class="p-2">Создатель</th>
-          <th class="p-2">Название</th>
-          <th class="p-2">Описание</th>
-          <th class="p-2">Количество вопросов</th>
-          <th class="p-2">Действие</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(q, index) in quizes" :key="q.id" class="divide-x divide-black">
-          <td class="p-2" @click="router.push({ name: 'quizById', params: { id: q.id } })">
-            {{ index + 1 }}
-          </td>
-          <td class="p-2" @click="router.push({ name: 'quizById', params: { id: q.id } })">
-            {{ q?.user.username }}
-          </td>
-          <td class="p-2" @click="router.push({ name: 'quizById', params: { id: q.id } })">
-            {{ q?.name }}
-          </td>
-          <td class="p-2" @click="router.push({ name: 'quizById', params: { id: q.id } })">
-            {{ q?.description }}
-          </td>
-          <td class="p-2" @click="router.push({ name: 'quizById', params: { id: q.id } })">
-            {{ q?.questions.length }}
-          </td>
-          <td class="p-2">
-            <button
-              class="pr-4 fa fa-pencil fa-lg"
+    <fwb-table hoverable>
+      <fwb-table-head>
+        <fwb-table-head-cell>#</fwb-table-head-cell>
+        <fwb-table-head-cell>Создатель</fwb-table-head-cell>
+        <fwb-table-head-cell>Название</fwb-table-head-cell>
+        <fwb-table-head-cell>Описание</fwb-table-head-cell>
+        <fwb-table-head-cell>Количество вопросов</fwb-table-head-cell>
+        <fwb-table-head-cell><span class="sr-only">Действие</span></fwb-table-head-cell>
+      </fwb-table-head>
+      <fwb-table-body>
+        <fwb-table-row v-for="(q, index) in quizes" :key="q.id">
+          <fwb-table-cell @click="router.push({ name: 'quizById', params: { id: q.id } })">{{
+            index + 1
+          }}</fwb-table-cell>
+          <fwb-table-cell @click="router.push({ name: 'quizById', params: { id: q.id } })">{{
+            q?.user.username
+          }}</fwb-table-cell>
+          <fwb-table-cell @click="router.push({ name: 'quizById', params: { id: q.id } })">{{
+            q?.name
+          }}</fwb-table-cell>
+          <fwb-table-cell @click="router.push({ name: 'quizById', params: { id: q.id } })">{{
+            q?.description
+          }}</fwb-table-cell>
+          <fwb-table-cell @click="router.push({ name: 'quizById', params: { id: q.id } })">{{
+            q?.questions.length
+          }}</fwb-table-cell>
+          <fwb-table-cell>
+            <fwb-button
+              color="alternative"
+              class="fa fa-pencil fa-lg"
               @click="showQuizModal(modalTypes[1], q)"
-            ></button>
-            <button class="fa fa-trash fa-lg" @click="deleteQuiz(q.id)"></button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            ></fwb-button>
+            <fwb-button
+              color="alternative"
+              class="fa fa-trash fa-lg"
+              @click="deleteQuiz(q.id)"
+            ></fwb-button>
+          </fwb-table-cell>
+        </fwb-table-row>
+      </fwb-table-body>
+    </fwb-table>
   </div>
 </template>
-: { id: number }: { id: number }

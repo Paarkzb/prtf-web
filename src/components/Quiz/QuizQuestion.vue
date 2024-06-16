@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import { FwbInput } from 'flowbite-vue'
 
 const props = defineProps({
   Index: Number,
@@ -24,22 +25,28 @@ function answerChange(e) {
 </script>
 
 <template>
-  <div class="flex flex-col">
-    <label for="question">Вопрос {{ Index }}</label>
-    <input
-      type="text"
-      name="question"
-      @input="titleChange"
-      :id="'question' + Index"
-      :value="titleValue"
-    />
-    <label for="answer">Ответ {{ Index }}</label>
-    <input
-      type="text"
-      name="answer"
-      @input="answerChange"
-      :id="'answer' + Index"
-      :value="answerValue"
-    />
+  <div class="flex">
+    <div class="p-5 text-white self-center">{{ Index }}</div>
+    <div class="flex-1">
+      <div class="flex flex-col gap-2">
+        <fwb-input
+          @input="titleChange"
+          :id="'question' + Index"
+          :value="titleValue"
+          placeholder="Вопрос"
+        />
+
+        <fwb-input
+          @input="answerChange"
+          :id="'answer' + Index"
+          :value="answerValue"
+          placeholder="Ответ"
+        />
+      </div>
+    </div>
+    <div class="p-5 text-white self-center">
+      <div>+</div>
+      <div>-</div>
+    </div>
   </div>
 </template>
