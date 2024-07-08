@@ -11,12 +11,19 @@ import router from './router'
 import { type AxiosInstance } from 'axios'
 import axiosInstanceConfig from '@/config/axiosInstanceConfig'
 
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+
+library.add(fas)
+
 const app = createApp(App)
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 
 app.use(pinia)
 app.use(router)
+app.component('font-awesome-icon', FontAwesomeIcon)
 
 declare global {
   interface Window {
@@ -25,7 +32,7 @@ declare global {
   }
 }
 
-window.quizApiURL = 'http://localhost:8001/'
+window.quizApiURL = 'http://localhost:8081/'
 
 window.axios = axiosInstanceConfig
 

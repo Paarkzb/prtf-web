@@ -92,10 +92,9 @@ function closeModal() {
           <div class="text-center">
             <span class="text-xl" v-if="props.type === 'create'">Создание квиза</span>
             <span class="text-xl" v-if="props.type === 'edit'">Изменение квиза</span>
-            <button
-              class="modal-default-button float-right fa fa-times"
-              @click="closeModal()"
-            ></button>
+            <button class="modal-default-button float-right" @click="closeModal()">
+              <font-awesome-icon icon="times" />
+            </button>
           </div>
         </div>
         <div class="modal-body">

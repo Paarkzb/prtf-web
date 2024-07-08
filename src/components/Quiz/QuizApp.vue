@@ -132,16 +132,12 @@ function closeQuizModal() {
             q?.questions.length
           }}</fwb-table-cell>
           <fwb-table-cell>
-            <fwb-button
-              color="alternative"
-              class="fa fa-pencil fa-lg"
-              @click="showQuizModal(modalTypes[1], q)"
-            ></fwb-button>
-            <fwb-button
-              color="alternative"
-              class="fa fa-trash fa-lg"
-              @click="deleteQuiz(q.id)"
-            ></fwb-button>
+            <fwb-button color="alternative" @click="showQuizModal(modalTypes[1], q)"
+              ><font-awesome-icon icon="pencil"
+            /></fwb-button>
+            <fwb-button color="alternative" @click="deleteQuiz(q.id)"
+              ><font-awesome-icon icon="trash"
+            /></fwb-button>
           </fwb-table-cell>
         </fwb-table-row>
       </fwb-table-body>
