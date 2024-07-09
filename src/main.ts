@@ -32,7 +32,7 @@ declare global {
   }
 }
 
-window.quizApiURL = 'http://localhost:8081/'
+window.quizApiURL = 'http://localhost:8086/'
 
 window.axios = axiosInstanceConfig
 

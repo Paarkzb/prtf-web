@@ -97,7 +97,7 @@ onMounted(() => {
 <template>
   <!-- <div>{{ quizData }}</div> -->
   <div>
-    <fwb-button color="yellow" @click="router.go(-1)">Назад</fwb-button>
+    <fwb-button color="yellow" @click="router.push('/admin/quiz')">Назад</fwb-button>
   </div>
   <div class="text-center">
     <div>
