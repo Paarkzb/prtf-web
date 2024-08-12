@@ -29,10 +29,12 @@ declare global {
   interface Window {
     axios: AxiosInstance
     quizApiURL: string
+    chatApiURL: string
   }
 }
 
 window.quizApiURL = 'http://localhost:8086/'
+window.chatApiURL = 'http://localhost:8071/'
 
 window.axios = axiosInstanceConfig
 

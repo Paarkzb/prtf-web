@@ -40,6 +40,7 @@ function logout() {
             </fwb-list-group-item>
           </fwb-list-group>
         </fwb-dropdown>
+        <fwb-navbar-link link="/chat"> Чат </fwb-navbar-link>
       </fwb-navbar-collapse>
     </template>
     <template #right-side>
