@@ -1,14 +1,6 @@
 <script setup lang="ts">
+import { ChatMessage } from './types'
 import { ref, type PropType } from 'vue'
-
-class ChatMessage {
-  type
-  body
-  constructor(type: String, body: string) {
-    this.type = type
-    this.body = body
-  }
-}
 
 const props = defineProps({
   chatHistory: Object as PropType<ChatMessage[]>

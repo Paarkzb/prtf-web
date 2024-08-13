@@ -1,32 +1,24 @@
 <script setup lang="ts">
 import { FwbButton } from 'flowbite-vue'
-import { onMounted, ref, type Ref } from 'vue'
+import { onMounted } from 'vue'
 import ChatHistory from './ChatHistory.vue'
+import { ChatMessage } from './types'
+import { useChatStore } from '@/stores/store'
 
 let socket = new WebSocket('ws://localhost:8071/ws')
 
-class ChatMessage {
-  type
-  body
-  constructor(type: String, body: string) {
-    this.type = type
-    this.body = body
-  }
-}
-
-const chatHistory: Ref<ChatMessage[]> = ref([])
+const store = useChatStore()
 
 function connect() {
   console.log('Attempting Connection...')
 
   socket.onopen = function (e) {
     console.log('Successfully connected', e)
-    addMsgToChatHistory(new ChatMessage(e.type, 'New User Joined...'))
   }
 
   socket.onmessage = function (msg) {
     console.log(msg)
-    addMsgToChatHistory(new ChatMessage(msg.type, msg.data))
+    addMsgToChatHistory(msg.data)
   }
 
   socket.onclose = function (e) {
@@ -44,7 +36,7 @@ function sendMsg(msg: string) {
 }
 
 function addMsgToChatHistory(msg: ChatMessage) {
-  chatHistory.value.push(msg)
+  store.chatHistory.push(msg)
 }
 
 onMounted(() => {
@@ -54,7 +46,8 @@ onMounted(() => {
 
 <template>
   <div>
-    <ChatHistory :chatHistory="chatHistory" />
+    <ChatHistory :chatHistory="store.chatHistory" :key="store.chatHistory.length" />
     <fwb-button @click="sendMsg('hello')">Send</fwb-button>
+    <fwb-button @click="store.chatHistory = []">Clear chat history</fwb-button>
   </div>
 </template>
