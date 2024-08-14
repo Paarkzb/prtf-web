@@ -4,6 +4,7 @@ import { onMounted } from 'vue'
 import ChatHistory from './ChatHistory.vue'
 import { ChatMessage } from './types'
 import { useChatStore } from '@/stores/store'
+import ChatInput from './ChatInput.vue'
 
 let socket = new WebSocket('ws://localhost:8071/ws')
 
@@ -18,7 +19,9 @@ function connect() {
 
   socket.onmessage = function (msg) {
     console.log(msg)
-    addMsgToChatHistory(msg.data)
+    let temp:ChatMessage = JSON.parse(msg.data)
+    let message = new ChatMessage(temp.type, temp.body)
+    addMsgToChatHistory(message)
   }
 
   socket.onclose = function (e) {
@@ -39,6 +42,14 @@ function addMsgToChatHistory(msg: ChatMessage) {
   store.chatHistory.push(msg)
 }
 
+function send(event: KeyboardEvent) {
+  const el = event.target as HTMLInputElement
+  if(event.code === 'Enter') {
+    sendMsg(el.value);
+    el.value = "";
+  }
+}
+
 onMounted(() => {
   connect()
 })
@@ -47,6 +58,7 @@ onMounted(() => {
 <template>
   <div>
     <ChatHistory :chatHistory="store.chatHistory" :key="store.chatHistory.length" />
+    <ChatInput :send="send"/>
     <fwb-button @click="sendMsg('hello')">Send</fwb-button>
     <fwb-button @click="store.chatHistory = []">Clear chat history</fwb-button>
   </div>
