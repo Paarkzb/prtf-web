@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { ChatMessage } from './types';
+import type { PropType } from 'vue'
+import { ChatMessage } from './types'
 
 const props = defineProps({
-    message: ChatMessage
+  message: Object as PropType<ChatMessage>
 })
 
 const msg: ChatMessage = props.message!
-
 </script>
 
 <template>
-    <div>
-        {{ msg.body }}
-    </div>
+  <div class="block bg-white my-[10px] px-[20px] py-[10px] rounded-md clear-both shadow-inherit">
+    {{ msg.body }}
+  </div>
 </template>

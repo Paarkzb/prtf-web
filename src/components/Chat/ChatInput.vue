@@ -1,18 +1,16 @@
 <script setup lang="ts">
+import { FwbInput } from 'flowbite-vue'
 
 const props = defineProps({
-    send: {
-        type: Function,
-        default() {
-            return 'Default function'
-        }
-    }
+  send: {
+    type: Function
+  }
 })
-
 </script>
 
 <template>
-    <div>
-        <input type="text" @keydown="props.send">
-    </div>
+  <div>
+    <!-- <fwb-input placeholder="Написать" label="Сообщение" @keyup.enter="props.send" /> -->
+    <input placeholder="Написать" label="Сообщение" @keydown.enter="props.send" />
+  </div>
 </template>

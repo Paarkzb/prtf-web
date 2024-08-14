@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { FwbButton } from 'flowbite-vue'
 import { onMounted } from 'vue'
-import ChatHistory from './ChatHistory.vue'
+import ChatHistoryComponent from './ChatHistoryComponent.vue'
 import { ChatMessage } from './types'
 import { useChatStore } from '@/stores/store'
 import ChatInput from './ChatInput.vue'
@@ -19,8 +19,7 @@ function connect() {
 
   socket.onmessage = function (msg) {
     console.log(msg)
-    let temp:ChatMessage = JSON.parse(msg.data)
-    let message = new ChatMessage(temp.type, temp.body)
+    let message: ChatMessage = JSON.parse(msg.data)
     addMsgToChatHistory(message)
   }
 
@@ -44,9 +43,9 @@ function addMsgToChatHistory(msg: ChatMessage) {
 
 function send(event: KeyboardEvent) {
   const el = event.target as HTMLInputElement
-  if(event.code === 'Enter') {
-    sendMsg(el.value);
-    el.value = "";
+  if (event.code === 'Enter') {
+    sendMsg(el.value)
+    el.value = ''
   }
 }
 
@@ -57,8 +56,8 @@ onMounted(() => {
 
 <template>
   <div>
-    <ChatHistory :chatHistory="store.chatHistory" :key="store.chatHistory.length" />
-    <ChatInput :send="send"/>
+    <ChatHistoryComponent :chatHistory="store.chatHistory" :key="store.chatHistory.length" />
+    <ChatInput :send="send" />
     <fwb-button @click="sendMsg('hello')">Send</fwb-button>
     <fwb-button @click="store.chatHistory = []">Clear chat history</fwb-button>
   </div>

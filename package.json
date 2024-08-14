@@ -28,7 +28,8 @@
     "uuid": "^9.0.1",
     "vue": "^3.4.21",
     "vue-axios": "^3.5.2",
-    "vue-router": "^4.3.0"
+    "vue-router": "^4.3.0",
+    "zipson": "^0.2.12"
   },
   "devDependencies": {
     "@playwright/test": "^1.43.0",

@@ -2,6 +2,7 @@
 import { RouterView } from 'vue-router'
 import { useUserStore } from '@/stores/store'
 import {
+  FwbButton,
   FwbNavbar,
   FwbNavbarCollapse,
   FwbNavbarLink,

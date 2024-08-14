@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ChatMessage } from '@/components/Chat/types'
+import { parse, stringify } from 'zipson'
 
 interface User {
   id: string
@@ -32,5 +33,10 @@ export const useChatStore = defineStore('chat', {
   state: () => ({
     chatHistory: <ChatMessage[]>[]
   }),
-  persist: true
+  persist: {
+    serializer: {
+      deserialize: parse,
+      serialize: stringify
+    }
+  }
 })
