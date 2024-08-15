@@ -2,7 +2,6 @@
 import { RouterView } from 'vue-router'
 import { useUserStore } from '@/stores/store'
 import {
-  FwbButton,
   FwbNavbar,
   FwbNavbarCollapse,
   FwbNavbarLink,
@@ -30,10 +29,10 @@ function logout() {
         <fwb-navbar-link link="/about"> Контакты </fwb-navbar-link>
         <fwb-dropdown v-if="store.isLogged">
           <template #trigger>
-            <fwb-button
-              class="text-gray-700 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+            <span
+              class="cursor-pointer text-gray-700 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
               >Админ
-            </fwb-button>
+            </span>
           </template>
           <fwb-list-group>
             <fwb-list-group-item>

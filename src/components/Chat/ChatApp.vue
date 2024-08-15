@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { FwbButton } from 'flowbite-vue'
 import { onMounted } from 'vue'
 import ChatHistoryComponent from './ChatHistoryComponent.vue'
 import { ChatMessage } from './types'
@@ -47,6 +46,7 @@ function send(event: KeyboardEvent) {
     sendMsg(el.value)
     el.value = ''
   }
+  event.stopImmediatePropagation()
 }
 
 onMounted(() => {
@@ -57,8 +57,6 @@ onMounted(() => {
 <template>
   <div>
     <ChatHistoryComponent :chatHistory="store.chatHistory" :key="store.chatHistory.length" />
-    <ChatInput :send="send" />
-    <fwb-button @click="sendMsg('hello')">Send</fwb-button>
-    <fwb-button @click="store.chatHistory = []">Clear chat history</fwb-button>
+    <ChatInput class="mt-5" :send="send" />
   </div>
 </template>
